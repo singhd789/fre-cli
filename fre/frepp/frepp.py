@@ -12,6 +12,7 @@ from fre.frepp.validate import *
 from fre.frepp.install import *
 from fre.frepp.run import *
 from fre.frepp.status import *
+from fre.frepp.stop import *
 
 #############################################
 
@@ -50,6 +51,14 @@ def validate(context, experiment, platform, target):
 @click.pass_context
 def install(context, experiment, platform, target):
     context.forward(install_subtool)
+
+#############################################
+
+# fre pp stop
+@pp.command()
+@click.pass_context
+def stop(context, experiment, platform, target):
+    context.forward(stop_workflow)
 
 #############################################
 

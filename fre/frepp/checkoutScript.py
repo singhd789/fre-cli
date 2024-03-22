@@ -6,7 +6,9 @@
 import os
 from pathlib import Path
 import subprocess
+from subprocess import PIPE, STDOUT
 import click
+import re
 
 #############################################
 
@@ -46,8 +48,24 @@ def checkoutTemplate(experiment, platform, target):
 
     # Clone the repository with depth=1
     click.echo("cloning into directory " + directory + "/" + name)
+    print("this is my local copy")
+    preexist_error = f"fatal: destination path '{name}' already exists and is not an empty directory."
     clonecmd = f"git clone --depth=1 --recursive https://gitlab.gfdl.noaa.gov/fre2/workflows/postprocessing.git {name}"
-    subprocess.run(clonecmd, shell=True, check=True)
+    cloneproc = subprocess.run(clonecmd, shell=True, check=False, stdout=PIPE, stderr=STDOUT)
+    if not cloneproc.returncode == 0:
+        if re.search(preexist_error.encode('ASCII'),cloneproc.stdout) is not None:
+            argstring = f" -e {experiment} -p {platform} -t {target}"
+            stop_report = "\n".join([f"Error in checkoutTemplate: the workflow definition specified by -e/-p/-t already exists at the location ~/cylc-src/{name}",
+            #"To run this experiment, either change the experiment name in the configutation file",
+            #f"> cat $configuration_file | grep {name}",
+            #f"> echo $config_file | sed -e 's:{name}:$new-experiment-name:g' > $new_config_file",
+            "To run this experiment clean up the previous experiment of this name by running",
+            "> fre pp stop " + argstring])
+            click.echo(stop_report)
+            return 1
+        else:
+            print(cloneproc.stdout)
+            return 1
 
 #############################################
 

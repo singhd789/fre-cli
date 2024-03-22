@@ -287,7 +287,29 @@ def validate(context, experiment, platform, target):
 def install(context, experiment, platform, target):
     """Install PP configuration"""
     context.forward(frepp.frepp.install)
-
+    
+#fre pp stop    
+@frePP.command()
+@click.option("-e",
+              "--experiment",
+              type=str,
+              help="Experiment name",
+              required=True)
+@click.option("-p",
+              "--platform",
+              type=str,
+              help="Platform name",
+              required=True)
+@click.option("-t",
+                "--target",
+                type=str,
+                help="Target name",
+                required=True)
+@click.pass_context
+def stop(context, experiment, platform, target):
+    """Stop processes associated with experiment and clean up intermediate files"""
+    context.forward(frepp.frepp.stop)
+    
 @frePP.command()
 @click.option("-y", 
               type=str, 
