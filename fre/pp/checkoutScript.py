@@ -26,10 +26,10 @@ def _checkoutTemplate(experiment, platform, target, branch='main',
     name = f"{experiment}__{platform}__{target}"
 
     # Clone the repository with depth=1; check for errors
-    click.echo("cloning experiment into directory " + directory + "/" + name)
+    click.echo("cloning experiment into directory " + git_checkout_dir + "/" + name)
     clonecmd = (
-        f"git clone -b {branch} --single-branch --depth=1 --recursive "
-        f"-C {git_checkout_dir} "
+        f"git -C {git_checkout_dir} "
+        f"clone -b {branch} --single-branch --depth=1 --recursive "
         f"https://github.com/NOAA-GFDL/fre-workflows.git {name}" )
     preexist_error = f"fatal: destination path '{name}' exists and is not an empty directory."
     click.echo(clonecmd)
@@ -59,12 +59,12 @@ def git_report_branch(repo):
     '''
     Reports on the name of curent branch; wrapper for system git command
     '''
-    gitcmd = f"git rev-parse --abbrev-ref HEAD"
+    gitcmd = f"git -C {repo} rev-parse --abbrev-ref HEAD"
     gitproc = subprocess.run(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT)
     click.echo(gitproc.stdout)
     if not gitproc.returncode == 0:
         sys.exit("Error in git_report_branch: git command exited with status " + 
-                 str(gitproc.status) + ". Please query branch from commandline.")
+                 str(gitproc.returncode) + ". Please query branch from commandline.")
     else:
         return(gitproc.stdout)
 

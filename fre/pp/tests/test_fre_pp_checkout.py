@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-from fre import fre
-from fre import frepp
-from frepp import checkoutScript
+from fre import pp
+from fre.pp import checkoutScript
+
+import os
 
 #from click.testing import CliRunner
 #runner = CliRunner()
@@ -20,12 +21,27 @@ from frepp import checkoutScript
 
 #-- fre pp checkout
 def test_cli_fre_pp_checkout_main():
-    
-    result = runner.invoke(fre.fre, args=['--help', "pp checkout"])
-    assert result.exit_code == 0
+    checkout_dir = os.path.expanduser("~/cylc-src")
+    experiment = "fake1"
+    platform = "forgery1"
+    target = "artifice1"
+    checkoutstat = pp.checkoutScript._checkoutTemplate(experiment, platform, target, 
+                                                git_checkout_dir = checkout_dir)
+    branch_checkout = pp.checkoutScript.git_report_branch(checkout_dir)
+    print(os.listdir(checkout_dir))
+    assert branch_checkout == "main"
     
 def test_cli_fre_pp_checkout_testbranch():
-    result = runner.invoke(fre.fre, args=['optionDNE', "pp checkout"])
-    assert result.exit_code == 2
+    checkout_dir = os.path.expanduser("~/cylc-src")
+    experiment = "fake2"
+    platform = "forgery2"
+    target = "artifice2"
+    branch = "testbranch"
+    checkoutstat = fre.pp.checkoutScript._checkoutTemplate(experiment, platform, target, 
+                                                branch=branch,
+                                                git_checkout_dir = checkout_dir)
+    branch_checkout = fre.pp.checkoutScript.git_report_branch(checkout_dir)
+    print(os.listdir(checkout_dir))
+    assert branch_checkout == branch
     
 ############ cleanup
