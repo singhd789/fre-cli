@@ -14,20 +14,13 @@ import re
 
 #############################################
 
-package_dir = os.path.dirname(os.path.abspath(__file__))
-
-#############################################
-
-def _checkoutTemplate(experiment, platform, target, branch='main'):
+def _checkoutTemplate(experiment, platform, target, branch='main', 
+                      git_checkout_dir = os.path.expanduser("~/cylc-src")):
     """
     Checkout the workflow template files from the repo
     """
     # Create the directory if it doesn't exist
-    directory = os.path.expanduser("~/cylc-src")
-    os.makedirs(directory, exist_ok=True)
-
-    # Change the current working directory
-    os.chdir(directory)
+    os.makedirs(git_checkout_dir, exist_ok=True)
 
     # Set the name of the directory
     name = f"{experiment}__{platform}__{target}"
@@ -36,6 +29,7 @@ def _checkoutTemplate(experiment, platform, target, branch='main'):
     click.echo("cloning experiment into directory " + directory + "/" + name)
     clonecmd = (
         f"git clone -b {branch} --single-branch --depth=1 --recursive "
+        f"-C {git_checkout_dir} "
         f"https://github.com/NOAA-GFDL/fre-workflows.git {name}" )
     preexist_error = f"fatal: destination path '{name}' exists and is not an empty directory."
     click.echo(clonecmd)
@@ -61,6 +55,19 @@ def _checkoutTemplate(experiment, platform, target, branch='main'):
             click.echo(cloneproc.stdout)
         return 1
 
+def git_report_branch(repo):
+    '''
+    Reports on the name of curent branch; wrapper for system git command
+    '''
+    gitcmd = f"git rev-parse --abbrev-ref HEAD"
+    gitproc = subprocess.run(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT)
+    click.echo(gitproc.stdout)
+    if not gitproc.returncode == 0:
+        sys.exit("Error in git_report_branch: git command exited with status " + 
+                 str(gitproc.status) + ". Please query branch from commandline.")
+    else:
+        return(gitproc.stdout)
+
 #############################################
 
 @click.command()
@@ -69,7 +76,10 @@ def checkoutTemplate(experiment, platform, target, branch="main"):
     Wrapper script for calling checkoutTemplate - allows the decorated version
     of the function to be separate from the undecorated version
     '''
-    return _checkoutTemplate(experiment, platform, target, branch)
+    #For testing, we want to be able to call _checkoutTemplate  without a
+    #hard-coded path; for production, we want to enfocrce  a fixed dir struct
+    user_checkout_dir = os.path.expanduser("~/cylc-src")
+    return _checkoutTemplate(experiment, platform, target, branch, user_checkout_dir)
 
 
 if __name__ == '__main__':
