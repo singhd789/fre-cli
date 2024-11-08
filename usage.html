@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Usage-By-Tool &mdash; Fre-Cli 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=fc035491" />
+      <link rel="stylesheet" type="text/css" href="_static/fonts.css?v=5583d106" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tool Guides" href="tool_guides.html" />
+    <link rel="prev" title="Setup" href="setup.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Fre-Cli
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage-By-Tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fre"><code class="docutils literal notranslate"><span class="pre">fre</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-app"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">app</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#generate-time-averages"><code class="docutils literal notranslate"><span class="pre">generate-time-averages</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#regrid-xy"><code class="docutils literal notranslate"><span class="pre">regrid_xy</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-catalog"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">catalog</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#builder"><code class="docutils literal notranslate"><span class="pre">builder</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#validate"><code class="docutils literal notranslate"><span class="pre">validate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-cmor"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">cmor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run"><code class="docutils literal notranslate"><span class="pre">run</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-make"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">make</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-checkout"><code class="docutils literal notranslate"><span class="pre">create-checkout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-makefile"><code class="docutils literal notranslate"><span class="pre">create-makefile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-compile"><code class="docutils literal notranslate"><span class="pre">create-compile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-dockerfile"><code class="docutils literal notranslate"><span class="pre">create-dockerfile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-fremake"><code class="docutils literal notranslate"><span class="pre">run-fremake</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-pp"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configure"><code class="docutils literal notranslate"><span class="pre">configure</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#checkout"><code class="docutils literal notranslate"><span class="pre">checkout</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-yamltools"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">yamltools</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#combine-yamls"><code class="docutils literal notranslate"><span class="pre">combine-yamls</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-check"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">check</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-list"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">list</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-run"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">run</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#fre-test"><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">test</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tool_guides.html">Tool Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_usage.html">Developer Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing_to_doc.html">Documentation-Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="badges.html">Badges</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fre-Cli</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Usage-By-Tool</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/usage.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="usage-by-tool">
+<h1>Usage-By-Tool<a class="headerlink" href="#usage-by-tool" title="Link to this heading"></a></h1>
+<p>for setup, see the setup section.</p>
+<section id="fre">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span></code><a class="headerlink" href="#fre" title="Link to this heading"></a></h2>
+<p>Brief rundown of commands also provided below:</p>
+<ul class="simple">
+<li><p>Enter commands and follow <code class="docutils literal notranslate"><span class="pre">--help</span></code> messages for guidance</p></li>
+<li><p>If the user just runs <code class="docutils literal notranslate"><span class="pre">fre</span></code>, it will list all the command groups following <code class="docutils literal notranslate"><span class="pre">fre</span></code>, such as
+<code class="docutils literal notranslate"><span class="pre">run</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span></code>, <code class="docutils literal notranslate"><span class="pre">pp</span></code>, etc. and once the user specifies a command group, the list of available
+subcommands for that group will be shown</p></li>
+<li><p>Commands that require arguments to run will alert user about missing arguments, and will also list
+the rest of the optional parameters if <code class="docutils literal notranslate"><span class="pre">--help</span></code> is executed</p></li>
+<li><p>Argument flags are not positional, can be specified in any order as long as they are specified</p></li>
+<li><p>Can run directly from any directory, no need to clone repository</p></li>
+<li><p>May need to deactivate environment and reactivate it in order for changes to apply</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fre/setup.py</span></code> allows <code class="docutils literal notranslate"><span class="pre">fre/fre.py</span></code> to be ran as <code class="docutils literal notranslate"><span class="pre">fre</span></code> on the command line by defining it as an
+<em>entry point</em>. Without it, the call would be instead, something like <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">fre/fre.py</span></code></p></li>
+</ul>
+</section>
+<section id="fre-app">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">app</span></code><a class="headerlink" href="#fre-app" title="Link to this heading"></a></h2>
+<section id="generate-time-averages">
+<h3><code class="docutils literal notranslate"><span class="pre">generate-time-averages</span></code><a class="headerlink" href="#generate-time-averages" title="Link to this heading"></a></h3>
+</section>
+<section id="regrid-xy">
+<h3><code class="docutils literal notranslate"><span class="pre">regrid_xy</span></code><a class="headerlink" href="#regrid-xy" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="fre-catalog">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">catalog</span></code><a class="headerlink" href="#fre-catalog" title="Link to this heading"></a></h2>
+<section id="builder">
+<h3><code class="docutils literal notranslate"><span class="pre">builder</span></code><a class="headerlink" href="#builder" title="Link to this heading"></a></h3>
+<blockquote>
+<div><p>Generate a catalog</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Builds json and csv format catalogs from user input directory path</p></li>
+<li><p>Minimal Syntax: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">catalog</span> <span class="pre">builder</span> <span class="pre">-i</span> <span class="pre">[input</span> <span class="pre">path]</span> <span class="pre">-o</span> <span class="pre">[output</span> <span class="pre">path]</span></code></p></li>
+<li><p>Module(s) needed: n/a</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">catalog</span> <span class="pre">builder</span> <span class="pre">-i</span> <span class="pre">/archive/am5/am5/am5f3b1r0/c96L65_am5f3b1r0_pdclim1850F/gfdl.ncrc5-deploy-prod-openmp/pp</span> <span class="pre">-o</span> <span class="pre">~/output</span> <span class="pre">--overwrite</span></code></p></li>
+</ul>
+</section>
+<section id="validate">
+<h3><code class="docutils literal notranslate"><span class="pre">validate</span></code><a class="headerlink" href="#validate" title="Link to this heading"></a></h3>
+<p>Validate the catalog</p>
+</section>
+</section>
+<section id="fre-cmor">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">cmor</span></code><a class="headerlink" href="#fre-cmor" title="Link to this heading"></a></h2>
+<section id="run">
+<h3><code class="docutils literal notranslate"><span class="pre">run</span></code><a class="headerlink" href="#run" title="Link to this heading"></a></h3>
+</section>
+</section>
+<section id="fre-make">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">make</span></code><a class="headerlink" href="#fre-make" title="Link to this heading"></a></h2>
+<p>Through the fre-cli, <cite>fre make</cite> can be used to create and run a checkout script, makefile, and compile a model.</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Fremake Canopy Supports:</dt><dd><ul>
+<li><p>multiple targets; use <cite>-t</cite> flag to define each target</p></li>
+<li><p>bare-metal build</p></li>
+<li><p>container creation</p></li>
+<li><p>parallel checkouts for bare-metal build**</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>** <strong>Note: Users will not be able to create containers without access to podman</strong></p>
+<p>Additionally, as mentioned, multiple targets can be used more multiple target-platform combinations.</p>
+<section id="create-checkout">
+<h3><code class="docutils literal notranslate"><span class="pre">create-checkout</span></code><a class="headerlink" href="#create-checkout" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><cite>fre make create-checkout [options]</cite></dt><dd><ul class="simple">
+<li><p>Purpose: Creates the checkout script and can check out source code (with execute option)</p></li>
+<li><dl class="simple">
+<dt>Options:</dt><dd><ul>
+<li><p><cite>-y, –yamlfile [experiment yaml] (required)</cite></p></li>
+<li><p><cite>-p, –platform [platform] (required)</cite></p></li>
+<li><p><cite>-t, –target [target] (required)</cite></p></li>
+<li><p><cite>-j, –jobs [number of jobs to run simultneously]</cite></p></li>
+<li><p><cite>-npc, –no-parallel-checkout (for container build)</cite></p></li>
+<li><p><cite>-e, –execute</cite></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="create-makefile">
+<h3><code class="docutils literal notranslate"><span class="pre">create-makefile</span></code><a class="headerlink" href="#create-makefile" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><cite>fre make create-makefile [options]</cite></dt><dd><ul class="simple">
+<li><p>Purpose: Creates the makefile</p></li>
+<li><dl class="simple">
+<dt>Options:</dt><dd><ul>
+<li><p><cite>-y, –yamlfile [experiment yaml] (required)</cite></p></li>
+<li><p><cite>-p, –platform [platform] (required)</cite></p></li>
+<li><p><cite>-t, –target [target] (required)</cite></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="create-compile">
+<h3><code class="docutils literal notranslate"><span class="pre">create-compile</span></code><a class="headerlink" href="#create-compile" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><cite>fre make create-compile [options]</cite></dt><dd><ul class="simple">
+<li><p>Purpose: Creates the compile script and compiles the model (with execute option)</p></li>
+<li><dl class="simple">
+<dt>Options:</dt><dd><ul>
+<li><p><cite>-y, –yamlfile [experiment yaml] (required)</cite></p></li>
+<li><p><cite>-p, –platform [platform] (required)</cite></p></li>
+<li><p><cite>-t, –target [target] (required)</cite></p></li>
+<li><p><cite>-j, –jobs [number of jobs to run simultneously]</cite></p></li>
+<li><p><cite>-n, –parallel [number of concurrent modile compiles]</cite></p></li>
+<li><p><cite>-e, –execute</cite></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="create-dockerfile">
+<h3><code class="docutils literal notranslate"><span class="pre">create-dockerfile</span></code><a class="headerlink" href="#create-dockerfile" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><cite>fre make create-dockerfile [options]</cite></dt><dd><ul class="simple">
+<li><p>Purpose: Creates the dockerfile and creates the container (with execute option)</p></li>
+<li><p>With the creation of the dockerfile, the Makefile, checkout script, and any other necessary script is copied into the container from a temporary location</p></li>
+<li><dl class="simple">
+<dt>Options:</dt><dd><ul>
+<li><p><cite>-y, –yamlfile [experiment yaml] (required)</cite></p></li>
+<li><p><cite>-p, –platform [platform] (required)</cite></p></li>
+<li><p><cite>-t, –target [target] (required)</cite></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="run-fremake">
+<h3><code class="docutils literal notranslate"><span class="pre">run-fremake</span></code><a class="headerlink" href="#run-fremake" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt><cite>fre make run-fremake [options]</cite></dt><dd><ul class="simple">
+<li><p>Purpose: Create the checkout script, Makefile, compile script, and dockerfile (platform dependent) for the compilation of the model</p></li>
+<li><dl class="simple">
+<dt>Options:</dt><dd><ul>
+<li><p><cite>-y, –yamlfile [experiment yaml] (required)</cite></p></li>
+<li><p><cite>-p, –platform [platform] (required)</cite></p></li>
+<li><p><cite>-t, –target [target] (required)</cite></p></li>
+<li><p><cite>-npc, –no-parallel-checkout (for container build)</cite></p></li>
+<li><p><cite>-j, –jobs [number of jobs to run simultneously]</cite></p></li>
+<li><p><cite>-n, –parallel [number of concurrent modile compiles]</cite></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Guide and quickstart to <cite>fre make</cite> subtools:</p>
+<p><a class="reference internal" href="tool_guides.html#fre-make-guide"><span class="std std-ref">fre make guide</span></a></p>
+</section>
+</section>
+<section id="fre-pp">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span></code><a class="headerlink" href="#fre-pp" title="Link to this heading"></a></h2>
+<section id="configure">
+<h3><code class="docutils literal notranslate"><span class="pre">configure</span></code><a class="headerlink" href="#configure" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Postprocessing yaml configuration</p></li>
+<li><p>Minimal Syntax: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span> <span class="pre">configure</span> <span class="pre">-y</span> <span class="pre">[user-edit</span> <span class="pre">yaml</span> <span class="pre">file]</span></code></p></li>
+<li><p>Module(s) needed: n/a</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span> <span class="pre">configure</span> <span class="pre">-y</span> <span class="pre">/home/$user/pp/ue2/user-edits/edits.yaml</span></code></p></li>
+</ul>
+</section>
+<section id="checkout">
+<h3><code class="docutils literal notranslate"><span class="pre">checkout</span></code><a class="headerlink" href="#checkout" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Checkout template file and clone gitlab.gfdl.noaa.gov/fre2/workflows/postprocessing.git repository</p></li>
+<li><p>Minimal Syntax: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span> <span class="pre">checkout</span> <span class="pre">-e</span> <span class="pre">[experiment</span> <span class="pre">name]</span> <span class="pre">-p</span> <span class="pre">[platform</span> <span class="pre">name]</span> <span class="pre">-t</span> <span class="pre">[target</span> <span class="pre">name]</span></code></p></li>
+<li><p>Module(s) needed: n/a</p></li>
+<li><p>Example: <code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">pp</span> <span class="pre">checkout</span> <span class="pre">-e</span> <span class="pre">c96L65_am5f4b4r0_amip</span> <span class="pre">-p</span> <span class="pre">gfdl.ncrc5-deploy</span> <span class="pre">-t</span> <span class="pre">prod-openmp</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="fre-yamltools">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">yamltools</span></code><a class="headerlink" href="#fre-yamltools" title="Link to this heading"></a></h2>
+<section id="combine-yamls">
+<h3><code class="docutils literal notranslate"><span class="pre">combine-yamls</span></code><a class="headerlink" href="#combine-yamls" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>placehold</p></li>
+</ul>
+</section>
+</section>
+<section id="fre-check">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">check</span></code><a class="headerlink" href="#fre-check" title="Link to this heading"></a></h2>
+<p><strong>not-yet-implemented</strong></p>
+</section>
+<section id="fre-list">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">list</span></code><a class="headerlink" href="#fre-list" title="Link to this heading"></a></h2>
+<p><strong>not-yet-implemented</strong></p>
+</section>
+<section id="fre-run">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">run</span></code><a class="headerlink" href="#fre-run" title="Link to this heading"></a></h2>
+<p><strong>not-yet-implemented</strong></p>
+</section>
+<section id="fre-test">
+<h2><code class="docutils literal notranslate"><span class="pre">fre</span> <span class="pre">test</span></code><a class="headerlink" href="#fre-test" title="Link to this heading"></a></h2>
+<p><strong>not-yet-implemented</strong></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tool_guides.html" class="btn btn-neutral float-right" title="Tool Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Bennett Chang.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
