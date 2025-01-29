@@ -24,6 +24,7 @@ def test_cli_fre_option_dne():
 
 def test_fre_version():
     ''' module import flavor of below cli test '''
+    print(fre.version)
     assert '2024.01' == fre.version
 
 def test_cli_fre_version():
