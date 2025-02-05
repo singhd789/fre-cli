@@ -1,9 +1,14 @@
-=============
-YAML Framework
-=============
-In order to utilize these FRE tools, a distrubuted YAML structure is required. This framework includes a main model yaml, a compile yaml, a platforms yaml, and post-processing yamls. Throughout the compilation and post-processing steps, combined yamls that will be parsed for information are created. Yamls follow a dictionary-like structure with [key]: [value] fields.
+In order to utilize these FRE tools, a distrubuted YAML structure is required. This framework includes
 
-YAML Framework
+  - model yaml
+  - compile yaml
+  - platforms yaml
+  - post-processing yamls
+  - analysis yamls
+
+Throughout the compilation and post-processing steps, combined yamls that will be parsed for information are created. Yamls follow a dictionary-like structure with [key]: [value] fields.
+
+YAML Formatting
 ========================
 .. include:: yaml_dev/yaml_formatting.rst
 
@@ -23,6 +28,9 @@ Post-processing Yaml
 ==============================
 The post-processing yamls include information specific to experiments, such as directories to data and other scripts used, switches, and component information. The post-processing yaml can further define more fre_properties that may be experiment specific. If there are any repeated reusable variables, the ones set in this yaml will overwrite those set in the model yaml. This is discussed further in the “Postprocess FMS History Output” section.
 
+.. include:: yaml_dev/pp_yaml.rst
+
+
 Analysis Yaml
 ======================
-
+.. include:: yaml_dev/analysis_yaml.rst
