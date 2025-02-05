@@ -10,11 +10,11 @@ Throughout the compilation and post-processing steps, combined yamls that will b
 
 YAML Formatting
 ----------
-.. include:: yaml_dev/yaml_formatting.rst
+.. include:: usage/yaml_dev/yaml_formatting.rst
 
 Model Yaml
 ----------
-.. include:: yaml_dev/model_yaml.rst
+.. include:: usage/yaml_dev/model_yaml.rst
 
 Compile Yaml
 ----------
@@ -22,15 +22,15 @@ The compile yaml defines compilation information including component names, repo
 
 Platforms Yaml
 ----------
-.. include:: yaml_dev/platforms_yaml.rst
+.. include:: usage/yaml_dev/platforms_yaml.rst
 
 Post-processing Yaml
 ----------
 The post-processing yamls include information specific to experiments, such as directories to data and other scripts used, switches, and component information. The post-processing yaml can further define more fre_properties that may be experiment specific. If there are any repeated reusable variables, the ones set in this yaml will overwrite those set in the model yaml. This is discussed further in the “Postprocess FMS History Output” section.
 
-.. include:: yaml_dev/pp_yaml.rst
+.. include:: usage/yaml_dev/pp_yaml.rst
 
 
 Analysis Yaml
 ----------
-.. include:: yaml_dev/analysis_yaml.rst
+.. include:: usage/yaml_dev/analysis_yaml.rst
