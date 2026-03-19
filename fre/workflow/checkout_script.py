@@ -27,7 +27,7 @@ def validate_yaml(yamlfile: dict, application: str):
     :raises ValueError:
         - if gfdl_mdf_schema path is not valid
         - combined yaml is not valid
-        - unclear error in validation
+        - miscellaneous error in validation
     """
     schema_dir = Path(__file__).resolve().parents[1]
     schema_path = os.path.join(schema_dir, 'gfdl_msd_schemas', 'FRE', f'fre_{application}.json')
@@ -50,7 +50,7 @@ def validate_yaml(yamlfile: dict, application: str):
     except ValidationError as exc:
         raise ValueError("Combined yaml is not valid. Please fix the errors and try again.") from exc
     except Exception as exc:
-        raise ValueError("Unclear error from validation. Please try to find the error and try again.") from exc
+        raise ValueError("Miscellaneous error from validation. Please try to find the error and try again.") from exc
 
 def workflow_checkout(target_dir: str, yamlfile: str = None, experiment: str = None, application: str = None, force_checkout: Optional[bool] = False):
     """
