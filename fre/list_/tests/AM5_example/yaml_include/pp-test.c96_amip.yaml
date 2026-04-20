@@ -1,6 +1,6 @@
 # local reusable variable overrides
 fre_properties:
-  - &custom_interp "200,200"
+  test_custom_interp: "200,200"
 
 #c96_amip_postprocess:
 postprocess:
@@ -11,7 +11,7 @@ postprocess:
         - history_file: "atmos_8xdaily_cmip"
         - history_file: "atmos_daily_cmip"
       sourceGrid: "cubedsphere"
-      xyInterp: *custom_interp
+      xyInterp: "{{ fre_properties.test_custom_interp }}"
       interpMethod: "conserve_order2"
       inputRealm: 'atmos'
       postprocess_on: False
@@ -19,7 +19,7 @@ postprocess:
       sources:
         - history_file: "atmos_month"
       sourceGrid: "cubedsphere"
-      xyInterp: *PP_XYINTERP96
+      xyInterp: "{{ fre_properties.PP_XYINTERP96 }}"
       interpMethod: "conserve_order2"
       inputRealm: 'atmos'
       postprocess_on: False
@@ -27,7 +27,7 @@ postprocess:
       sources:
         - history_file: "atmos_level_cmip"
       sourceGrid: "cubedsphere"
-      xyInterp: *PP_XYINTERP96
+      xyInterp: "{{ fre_properties.PP_XYINTERP96 }}"
       interpMethod: "conserve_order2"
       inputRealm: 'atmos'
       postprocess_on: False

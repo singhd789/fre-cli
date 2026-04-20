@@ -23,21 +23,20 @@ def list_yamls_subtool(yamlfile: str, experiment: str):
     with open(yamlfile, 'r') as yf:
         yaml_dict = yaml.load(yf, Loader = yaml.Loader)
 
+    compile_data = yaml_dict["build"].get("compileYaml").split("/")[-1]
+    platform_data = yaml_dict["build"].get("platformYaml").split("/")[-1]
     exp_data = yaml_dict["experiments"].get(exp_name)
-    yamls = [model_yaml]
+    yamls = [model_yaml, compile_data, platform_data]
+
     # list yamls associated with the run, post-processing, and analysis
-    if exp_data:
+    if exp_name:
         for value in exp_data.values():
             if isinstance(value, list):
                 yamls.extend(value)
             else:
                 yamls.append(value)
-
-    # list yamls associate with compilation
     else:
-        experiment = "compile"
-        for value in yaml_dict["build"].values():
-            yamls.append(value)
+        fre_logger.info("No experiment name passed. Will only provide YAMLs related to compilation.")
 
     # Add full path for yaml configurations
     yamls_full_path = [f"{str(model_yaml_path)}/"+y for y in yamls]
