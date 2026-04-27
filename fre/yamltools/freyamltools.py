@@ -2,6 +2,7 @@
 
 import click
 from fre.yamltools import combine_yamls_script
+from fre.yamltools import combine_yamls_script_NEW
 
 @click.group(help=click.style(" - yamltools subcommands", fg=(202,177,95)))
 def yamltools_cli():
@@ -30,3 +31,23 @@ def combine_yamls(yamlfile,
     combine_yamls_script.consolidate_yamls(yamlfile,
                                            experiment, platform, target,
                                            use, output)
+
+@yamltools_cli.command()
+@click.option("-y", "--yamlfile", type=str,
+              help="YAML file to be used for parsing", required=True)
+@click.option("-e", "--experiment", type=str,
+              help="Experiment name")
+@click.option("-p", "--platform", type=str,
+              help="Platform name")
+@click.option("-t", "--target", type=str,
+              help="Target name")
+@click.option("-o", "--output", type=str,
+              help="Output")
+def combine_yamls_new(yamlfile, experiment,
+                      platform, target,
+                      output):
+    """
+    - Combine the model yaml with the compile, platform,
+    experiment, and analysis yamls
+    """
+    combine_yamls_script_NEW.yamltools_combine_subtool(yamlfile, experiment, platform, target, output)
