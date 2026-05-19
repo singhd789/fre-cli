@@ -1,4 +1,10 @@
-import 
+"""
+"""
+import logging
+
+# set up logging
+fre_logger = logging.getLogger(__name__)
+
 
 class Gen_SRUN() 
     def __init__(yamlfile, experiment, submit):
