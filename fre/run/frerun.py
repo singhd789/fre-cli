@@ -3,7 +3,7 @@ entry point for fre run subcommands
 '''
 
 import click
-from .frerunexample import run_test_function
+from fre.run import generate_srun_script
 
 @click.group(help=click.style(" - run subcommands", fg=(164,29,132)))
 def run_cli():
@@ -24,4 +24,4 @@ def run_cli():
 def gen_srun(yamlfile, experiment, submit):
     """
     """
-    generate_srun_script.generate_srun(yamlfile, experiment, submit)
+    generate_srun_script.gen_srun_subtool(yamlfile, experiment, submit)
