@@ -4,6 +4,7 @@ Generate the srun command to run the executable
 import logging
 import subprocess
 import yaml
+from pathlib import Path
 
 # set up logging
 fre_logger = logging.getLogger(__name__)
@@ -77,7 +78,7 @@ class GenSRUN():
         layout_info = []
         for e in self.exp:
             if e not in yml["layouts"]:
-                raise ValueError("Experiment not define in the layouts.yaml!!")
+                raise ValueError("Experiment not defined in the layouts.yaml!!")
 
             valid_layout = {e: yml["layouts"].get(e)}
             layout_info.append(valid_layout)
@@ -115,7 +116,10 @@ def gen_srun_subtool(yamlfile, experiment, submit):
     """
     # initialize object
     srun_obj = GenSRUN(yamlfile, experiment, submit)
-    yaml_dict = srun_obj.load_yaml()
+    if isinstance(yamlfile, dict):
+        yaml_dict = yamlfile
+    else:
+        yaml_dict = srun_obj.load_yaml()
     layout_info_list = srun_obj.get_layout_info(yaml_dict)
     srun_cmd = srun_obj.compose_srun(layout_info_list)
 
