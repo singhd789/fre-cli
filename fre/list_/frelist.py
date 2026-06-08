@@ -7,6 +7,7 @@ import click
 from fre.list_ import list_experiments_script
 from fre.list_ import list_platforms_script
 from fre.list_ import list_pp_components_script
+from fre.list_ import list_namelist_script
 
 @click.group(help=click.style(" - list subcommands", fg=(232,204,91)))
 def list_cli():
@@ -46,3 +47,20 @@ def platforms(yamlfile):
 def pp_components(yamlfile, experiment):
     """ - List components to be ppst-processed for a defined experiment"""
     list_pp_components_script.list_ppcomps_subtool(yamlfile, experiment)
+
+@list_cli.command()
+@click.option("-y",
+              "--yamlfile",
+              type=str,
+              help="Model YAML configuration file",
+              required=True)
+@click.option("-e",
+              "--experiment",
+              type=str,
+              default=None,
+              help="Name of experiment")
+#              required=True)
+def nml_files(yamlfile, experiment):
+    """- List platforms available """
+    list_namelist_script.list_namelist_subtool(yamlfile, experiment)
+
