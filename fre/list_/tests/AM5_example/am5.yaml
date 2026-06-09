@@ -44,7 +44,7 @@ experiments:
     settings: "yaml_include/settings.yaml"
     run:
       - "run1.yaml"
-    pp:
+    postprocess:
       - "yaml_include/pp.c96_amip.yaml"
       - "yaml_include/pp-test.c96_amip.yaml"
     analysis:
