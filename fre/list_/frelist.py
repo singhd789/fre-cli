@@ -57,7 +57,23 @@ def pp_components(yamlfile, experiment):
 @click.option("-e",
               "--experiment",
               type=str,
-              help="Model YAML configuration file")
-def yamls(yamlfile, experiment):
+              help="Experiment name")
+@click.option("--compile-only",
+              type=bool,
+              is_flag=True,
+              help="List yamls needed for compilation")
+@click.option("--runtime-only",
+              type=bool,
+              is_flag=True,
+              help="List yamls needed for model runtime")
+@click.option("--postprocess-only",
+              type=bool,
+              is_flag=True,
+              help="List yamls needed for postprocessing")
+@click.option("--analysis-only",
+              type=bool,
+              is_flag=True,
+              help="List yamls needed for analysis")
+def yamls(yamlfile, experiment, compile_only, runtime_only, postprocess_only, analysis_only):
     """ - List yamls to be combined"""
-    list_yamls_script.list_yamls_subtool(yamlfile, experiment)
+    list_yamls_script.list_yamls_subtool(yamlfile, experiment, compile_only, runtime_only, postprocess_only, analysis_only)
