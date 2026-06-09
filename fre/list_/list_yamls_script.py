@@ -56,7 +56,8 @@ def list_yamls_subtool(yamlfile: str, experiment: str, compile_only: bool, runti
             yamls.append(settings_data)
             yamls.extend(exp_data["postprocess"])
             yamls.extend(exp_data["analysis"])
-        else: # list all yamls - default behavior 
+        else: # list all yamls - default behavior
+            yamls.extend([compile_data, platform_data])
             for value in exp_data.values():
                 if isinstance(value, list):
                     yamls.extend(value)
