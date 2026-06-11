@@ -61,6 +61,6 @@ def pp_components(yamlfile, experiment):
               help="Name of experiment")
 #              required=True)
 def nml_files(yamlfile, experiment):
-    """- List platforms available """
+    """- List namelist files """
     list_namelist_script.list_namelist_subtool(yamlfile, experiment)
 

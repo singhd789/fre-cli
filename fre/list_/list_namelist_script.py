@@ -6,6 +6,7 @@ also some have inheritance that include other experiment's namelist files
 
 from pathlib import Path
 import logging
+import textwrap
 from fre.yamltools import combine_yamls_script as cy
 from fre.yamltools import helpers
 
@@ -47,16 +48,37 @@ def list_namelist_subtool(yamlfile: str, experiment: None):
     run = yml.get("run")
 
     nml_list = []
-    for k in run.get("input").get("namelist").keys():
-        if k !="files":
-            print(f"ah: {k}")
+    for k,v in run.get("input").get("namelist").items():
+        if k !="common_files":
+            tmp_nml = Path(f"{Path.cwd()}/tmp_nml")
+            Path(tmp_nml).mkdir(parents=True, exist_ok=True)
 
+            with open(f"{tmp_nml}/{k}.nml", "w") as f:
+                f.write(f" &{k}\n")
+                for line in v.splitlines():
+                    f.write(f"  {line}\n")
+                f.write("/")
+
+            nml_list.append(Path(f"{tmp_nml}/{k}.nml"))
+
+####QUESTIONS
+# are there namelist files for each experiment?
+# some are inherited...hm
+####
+
+####IDEA
+# is this too much?
+# create "tmp" location and write nml files based of strings defined in yaml
+# then all that would be passed is file paths to uw tools
+# should uw tools/yamltools clean tmp location?
+####
     # get files listed
-    nml_list.extend(run.get("input").get("namelist").get("files"))
+        elif k == "common_files":
+            nml_list.extend(run.get("input").get("namelist").get("common_files"))
 
     for i in nml_list:
         fre_logger.info('    - %s', i)
-    fre_logger.info("\n")
+    fre_logger.info("")
     fre_logger.setLevel(former_log_level)
 
     return nml_list
