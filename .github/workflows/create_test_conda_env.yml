@@ -6,10 +6,12 @@ env:
 on:
   pull_request:
     branches:
-
   push:
     branches:
       - main
+  schedule:
+    # Runs at 00:00 UTC every day (testing with 17:00 UTC == 1 PM eastern)
+    - cron: '0 17 * * *'
 
 # cancel running jobs if theres a newer push
 concurrency:
