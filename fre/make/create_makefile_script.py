@@ -112,6 +112,7 @@ def makefile_create(yamlfile: str, platform: tuple[str], target: tuple[str]):
                                                    srcDir = src_dir,
                                                    bldDir = bld_dir,
                                                    mkTemplatePath = template_path)
+
                 # Loop through components and send the component name, requires, and overrides for the Makefile
                 for c in fremake_yaml['src']:
                     fre_makefile.addComponent(c['component'], c['requires'], c['makeOverrides'])
@@ -129,6 +130,7 @@ def makefile_create(yamlfile: str, platform: tuple[str], target: tuple[str]):
                                                        container_flag = platform["container"])
                 fre_makefile = makefilefre.makefileContainer(exp = fremake_yaml["experiment"],
                                                       libs = fremake_yaml["container_addlibs"],
+                                                      linkerflags = fremake_yaml["container_linkerflags"],
                                                       srcDir = src_dir,
                                                       bldDir = bld_dir,
                                                       mkTemplatePath = template_path,

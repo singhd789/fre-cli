@@ -12,7 +12,14 @@ def linklineBuild(self):
 #if additional libraries are defined, populate the link line with the correct information for libraries
 ## CONTAINER; write a script that will execute in the container, to fill in link line with additional libraries in Makefile
     if "tmp" in self.filePath:
-        with open(self.filePath+"/linkline.sh","a") as fh:
+        # if container linkerflags defined
+        for l in self.lf:
+            linkline = linkline + " " + l
+        os.system(f"sed -i '/MK_TEMPLATE = /a CLF = {linkline}' {self.filePath}/Makefile")
+        os.system(f"sed -i 's|\\($(LDFLAGS)\\)|$(CLF) \\1|' {self.filePath}/Makefile")
+
+        # if container_addlibs is defined
+        with open(self.filePath+"/linkline.sh","w") as fh:
             fh.write("set -- ")
             for l in self.l:
                 fh.write(l+" ")
@@ -46,8 +53,8 @@ def linklineBuild(self):
         with open(self.filePath+"/linkline.sh","a") as fh:
             fh.writelines(textwrap.dedent(self.linklinecreate))
             fh.write("MF_PATH='/apps/"+self.e+"/exec/Makefile'\n")
-            fh.write('sed -i "/MK_TEMPLATE = /a LL = $line" $MF_PATH\n')
-            fh.write("sed -i 's|\\($^\\) \\($(LDFLAGS)\\)|\\1 $(LL) \\2|' $MF_PATH\n")
+            fh.write('sed -i "/MK_TEMPLATE = /a CL = $line" $MF_PATH\n')
+            fh.write("sed -i 's|\\($^\\) \\($(LDFLAGS)\\)|\\1 $(CL) \\2|' $MF_PATH\n")
 
 ## BARE METAL; if addlibs defined on bare metal, include those additional libraries in link line
     elif "tmp" not in self.filePath:
@@ -55,6 +62,7 @@ def linklineBuild(self):
             linkline = linkline + " " + l
         os.system(f"sed -i '/MK_TEMPLATE = /a LL = {linkline}' {self.filePath}/Makefile")
         os.system(f"sed -i 's|\\($(LDFLAGS)\\)|$(LL) \\1|' {self.filePath}/Makefile")
+
 
 class makefile():
     def __init__(self,exp,libs,srcDir,bldDir,mkTemplatePath):
@@ -70,6 +78,7 @@ class makefile():
         """
         self.e = exp
         self.l = libs
+        self.clf = ""
         self.src = srcDir
         self.bld =  bldDir
         self.template = mkTemplatePath
@@ -136,7 +145,7 @@ class makefile():
             fh.write("\t$(LD) $^ $(LDFLAGS) -o $@ $(STATIC_LIBS)"+"\n")
 
         # Write the link line script with user-provided libraries
-        if self.l:
+        if self.l or self.clf:
             linklineBuild(self)
 
         # Write the individual component library compiles
@@ -181,9 +190,10 @@ class makefile():
 ## \param mkTemplatePath The path of the template .mk file for compiling
 ## \param tmpDir A local path to temporarily store files build to be copied to the container
 class makefileContainer(makefile):
-    def __init__(self,exp,libs,srcDir,bldDir,mkTemplatePath,tmpDir):
+    def __init__(self,exp,libs,linkerflags,srcDir,bldDir,mkTemplatePath,tmpDir):
         self.e = exp
         self.l = libs
+        self.clf = linkerflags
         self.src = srcDir
         self.bld =  bldDir
         self.template = mkTemplatePath
