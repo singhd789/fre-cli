@@ -12,11 +12,18 @@ def linklineBuild(self):
 #if additional libraries are defined, populate the link line with the correct information for libraries
 ## CONTAINER; write a script that will execute in the container, to fill in link line with additional libraries in Makefile
     if "tmp" in self.filePath:
+        # checks
+        if not self.l:
+            return
+        if not self.clf:
+            return
+
         # if container linkerflags defined
-        for l in self.lf:
+        for l in self.clf:
             linkline = linkline + " " + l
         os.system(f"sed -i '/MK_TEMPLATE = /a CLF = {linkline}' {self.filePath}/Makefile")
         os.system(f"sed -i 's|\\($(LDFLAGS)\\)|$(CLF) \\1|' {self.filePath}/Makefile")
+
 
         # if container_addlibs is defined
         with open(self.filePath+"/linkline.sh","w") as fh:
@@ -144,7 +151,7 @@ class makefile():
             fh.write(self.e+".x: "+libstring+"\n")
             fh.write("\t$(LD) $^ $(LDFLAGS) -o $@ $(STATIC_LIBS)"+"\n")
 
-        # Write the link line script with user-provided libraries
+        # Write the link line script with user-provided libraries if defined
         if self.l or self.clf:
             linklineBuild(self)
 
