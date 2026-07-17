@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 as builder
+FROM ubuntu:26.04 as builder
 ####
 #ubuntu:24.04 chosen at the moment because it is a long-standing, commonly used standard release
 ####
