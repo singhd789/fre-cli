@@ -1,7 +1,4 @@
 FROM ubuntu:26.04 as builder
-####
-#ubuntu:24.04 chosen at the moment because it is a long-standing, commonly used standard release
-####
 
 # Install micromamba: micromamba is a tinier and faster version of mamba
 # Set where the conda installation goes
