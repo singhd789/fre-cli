@@ -9,9 +9,12 @@ fre list exps -y fre/make/tests/null_example/null_model.yaml
 # List platforms available in platforms yaml
 fre list platforms -y fre/make/tests/null_example/null_model.yaml
 
-##########
 # List components that will be post-processed
 fre list pp-components -y fre/pp/tests/AM5_example/am5.yaml -e c96L65_am5f7b12r1_amip
+
+# List yamls to be combined
+fre list yamls -y fre/pp/tests/AM5_example/am5.yaml -e c96L65_am5f7b12r1_amip
+fre list yamls -y fre/make/tests/null_example/null_model.yaml
 ```
 
 ## Subtools
@@ -30,3 +33,9 @@ fre list pp-components -y fre/pp/tests/AM5_example/am5.yaml -e c96L65_am5f7b12r1
    - Options:
         - `-y, --yamlfile [model yaml] (str; required)`
         - `-e, --experiment [experiment name] (str; required)`
+
+- `fre list yamls [options]`
+   - Purpose: Lists the yaml configuration files to be combined; can be associated with an experiment name
+   - Options:
+        - `-y, --yamlfile [model yaml] (str; required)`
+        - `-e, --experiment [experiment name]`
