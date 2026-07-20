@@ -28,7 +28,7 @@ def list_yamls_subtool(yamlfile: str, experiment: str, compile_only: bool, runti
     :type postprocess_only: boolean 
     :param analysis_only: is the flag to pass yaml configurations needed for postprocessing
     :type analysis_only: boolean
-    :return: Space separated string of absolute paths to yaml configurations
+    :return: Comma separated string of absolute paths to yaml configurations
     :rtype: str
     """
     model_yaml = Path(yamlfile).name
@@ -76,23 +76,30 @@ def list_yamls_subtool(yamlfile: str, experiment: str, compile_only: bool, runti
     yamls_full_path = ""
     # Add full path for yaml configurations
     for y in yamls:
-        yamls_full_path += f"{str(model_yaml_path)}/{y} "
+        yamls_full_path += f"{str(model_yaml_path)}/{y},"
 
     # set logger level to INFO
     former_log_level = fre_logger.level
     fre_logger.setLevel(logging.INFO)
 
+    yamls_full_path = yamls_full_path.rstrip(",")
     fre_logger.info("YAMLS to be combined (Experiment => %s):", experiment)
-    for y in yamls_full_path.split():
+    for y in yamls_full_path.split(","):
         fre_logger.info("  - %s", y)
 
+### Might add this in when fre yamltools combine-yamls is refactored 
+#    fre_logger.info("")
+#    fre_logger.info('If combining these yamls, there are 2 options:')
+#    fre_logger.info('   1. Pipe this tool to "fre yamltools combine"')
+#    fre_logger.info('   2. Copy and paste this string (including quotes) as the -y option in "fre yamltools combine -y <yamls>:')
+#    fre_logger.info('       "%s"', yamls_full_path)
+#    fre_logger.info("")
     fre_logger.setLevel(former_log_level)
 
     # Check if the paths exist; give warning
-    fre_logger.warning("")
-    for y in yamls_full_path.split():
+    fre_logger.info("")
+    for y in yamls_full_path.split(","):
         if not Path(y).exists():
             fre_logger.warning("**DNE**: %s", y)
-    fre_logger.warning("")
 
     return yamls_full_path
