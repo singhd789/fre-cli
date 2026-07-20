@@ -34,7 +34,7 @@ class TestListYamlsScript:
         assert isinstance(result, str)
 
         # Check that result contains expected YAML files
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
         assert "am5.yaml" in yaml_names
         assert "compile.yaml" in yaml_names
         assert "platforms.yaml" in yaml_names
@@ -55,7 +55,7 @@ class TestListYamlsScript:
             analysis_only=False
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -79,7 +79,7 @@ class TestListYamlsScript:
             analysis_only=False
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -104,7 +104,7 @@ class TestListYamlsScript:
             analysis_only=False
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -130,7 +130,7 @@ class TestListYamlsScript:
             analysis_only=True
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -155,7 +155,7 @@ class TestListYamlsScript:
             analysis_only=True
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -181,7 +181,7 @@ class TestListYamlsScript:
             analysis_only=False
         )
 
-        yaml_names = [Path(y).name for y in result.split()]
+        yaml_names = [Path(y).name for y in result.split(",")]
 
         # Model YAML should always be included
         assert "am5.yaml" in yaml_names
@@ -204,7 +204,7 @@ class TestListYamlsScript:
         )
 
         # All paths should be absolute or contain full directory structure
-        for yaml_path in result.split():
+        for yaml_path in result.split(","):
             path_obj = Path(yaml_path)
             assert path_obj.is_absolute() or "/" in yaml_path
 
@@ -230,7 +230,7 @@ class TestListYamlsScript:
                 analysis_only=analysis_only
             )
 
-            yaml_names = [Path(y).name for y in result.split()]
+            yaml_names = [Path(y).name for y in result.split(",")]
             assert "am5.yaml" in yaml_names, \
                 f"Model YAML not found with flags: " \
                 f"compile_only={compile_only}, " \
