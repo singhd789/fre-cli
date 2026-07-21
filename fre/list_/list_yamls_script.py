@@ -1,7 +1,9 @@
 """
 List_yamls_script provides methods to list and return YAML configurations found in the `[model].yaml`. 
 Different click options are avaiable to return only relevant yamls depending on the process the user
-wants to run (compile, runtime, postprocess, analysis).
+wants to run (compile, runtime, postprocess, analysis). If `-e [experiment name]` is provided, the
+default behavior is to return all YAML configuration files associated with that experiment. If an
+experiment name is not given, the model, compile, and platform configurations are returned.
 
 This subtool can be used to find what YAML configuration files are defined in the `[model].yaml`.
 
