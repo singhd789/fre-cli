@@ -18,7 +18,7 @@ fre_logger = logging.getLogger(__name__)
 
 def list_experiments_subtool(yamlfile: str):
     """
-    List the post-processing experiments available
+    List the experiments found.
 
     :param yamlfile: path to yaml configuration file
     :type yamlfile: str
@@ -61,7 +61,7 @@ def list_experiments_subtool(yamlfile: str):
     fre_logger.setLevel(logging.INFO)
 
     # log the experiment names, which should show up on screen for sure
-    fre_logger.info("Experiments available:")
+    fre_logger.info("Experiments found:")
     for i in yaml_dict.get("experiments"):
         fre_logger.info('   - %s', i.get("name"))
     fre_logger.info("\n")

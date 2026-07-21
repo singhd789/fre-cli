@@ -20,13 +20,17 @@ def list_yamls_subtool(yamlfile: str, experiment: str, compile_only: bool, runti
     :type yamlfile: str
     :param experiment: is the name of the experiment
     :type experiment: str
-    :param compile_only: is the flag to pass yaml configurations needed for compilation
+    :param compile_only: is the flag where if True, return yaml configurations
+                         needed for compilation. Defaults to False.
     :type compile_only: boolean 
-    :param runtime_only: is the flag to pass yaml configurations needed for model runtime
+    :param runtime_only: is the flag where if True, return yaml configurations
+                         needed for model runtime. Defaults to False.
     :type runtime_only: boolean 
-    :param postprocess_only: is the flag to pass yaml configurations needed for postprocessing
+    :param postprocess_only: is the flag where if True, return yaml configurations
+                             needed for postprocessing. Defaults to False.
     :type postprocess_only: boolean 
-    :param analysis_only: is the flag to pass yaml configurations needed for postprocessing
+    :param analysis_only: is the flag where if True, return yaml configurations
+                          needed for postprocessing. Defaults to False.
     :type analysis_only: boolean
     :return: Comma separated string of absolute paths to yaml configurations
     :rtype: str
