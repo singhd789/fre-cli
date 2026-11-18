@@ -1,0 +1,80 @@
+fre_properties:
+- am5f7b12r1
+- am5/am5f7b12r1
+- '1979'
+- '2020'
+- '1980'
+- '2020'
+- P1Y
+- 180,288
+- 720,1152
+- '0001'
+- '0011'
+- '0002'
+- '0011'
+- '0001'
+- '0006'
+- '0002'
+- '0006'
+- P5Y
+- P20Y
+- null
+- '2000'
+- /archive/oar.gfdl.am5/model_gen5/inputs/c96_grid/c96_OM4_025_grid_No_mg_drag_v20160808.tar
+- f1a1r1
+- intel-classic
+- -IFMS/fms2_io/include -IFMS/include -IFMS/mpp/include
+- -Imom6/MOM6-examples/src/MOM6/pkg/CVMix-src/include
+grids:
+- gm:
+    grid_label: gm
+    grid_desc: global mean data
+    nom_res: 5000 km
+- gn:
+    grid_label: gn
+    grid_desc: reported data on native grid
+    nom_res: 1 km
+- gr:
+    grid_label: gr
+    grid_desc: reported data regridded to preferred target grid
+    nom_res: 10 km
+- gr1:
+    grid_label: gr1
+    grid_desc: reported data regridded to non-preferred target grid different from
+      gr
+    nom_res: 25 km
+- gr2:
+    grid_label: gr2
+    grid_desc: reported data regridded to non-preferred target grid different from
+      gr, gr1
+    nom_res: 100 km
+- gr3:
+    grid_label: gr3
+    grid_desc: reported data regridded to non-preferred target grid different from
+      gr, gr1, gr2
+    nom_res: 250 km
+cmor:
+  start: null
+  stop: '2000'
+  mip_era: CMIP6
+  exp_json: fre/tests/test_files/CMOR_input_example.json
+  directories:
+    pp_dir: fre/tests/test_files/ascii_files/mock_archive/$USER/am5/am5f7b12r1/c96L65_am5f7b12r1_amip/ncrc5.intel-prod-openmp/pp
+    table_dir: fre/tests/test_files/cmip6-cmor-tables/Tables
+    outdir: fre/tests/test_files/iamnotreallyused/outdir/
+  table_targets:
+  - table_name: Amon
+    freq: null
+    gridding:
+      grid_label: gn
+      grid_desc: reported data on native grid
+      nom_res: 1 km
+    target_components:
+    - component_name: atmos_cmip
+      variable_list: fre/tests/test_files/varlist
+      data_series_type: ts
+      chunk: P5Y
+    - component_name: atmos_level_cmip
+      variable_list: fre/tests/test_files/varlist
+      data_series_type: ts
+      chunk: P5Y

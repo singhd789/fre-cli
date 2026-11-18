@@ -1,7 +1,12 @@
-''' 
-This script will determine an estimated number of timesteps from a postprocessed time-series file's name and run nccheck on it.
-Ran during time-series file creation during rename-split-to-pp and make-timeseries tasks in fre postprocessing workflow. 
-'''
+"""
+Post-Processed Time-Series Validation Utility for FRE Post-Processing (fre pp).
+
+The ppval_script module estimates the expected number of time steps contained within a post-processed
+time-series NetCDF file based on date strings in its filename and data sampling frequency.
+It then validates the actual time step count in the NetCDF file using `nccheck_script`.
+
+Executed during `rename-split-to-pp` and `make-timeseries` workflow tasks.
+"""
 
 import logging
 import os
@@ -15,33 +20,35 @@ from . import nccheck_script as ncc
 fre_logger = logging.getLogger(__name__)
 
 
-def getenot(date_start: str, 
-            date_end: str, 
-            chunk_type: str, 
+def getenot(date_start: str,
+            date_end: str,
+            chunk_type: str,
             cal: str):
     """
-    Returns the estimated number of timesteps using elapsed time (calculated using date_start/date_end) and data frequency (provided in chunk_type argument).
-    Date string formats must be YYYY,YYYYMM,YYYYMMDD,YYYYMMDDHH,or YYYYMMDDHH:mm
-    
-    Ex: Will return value of 36 (timesteps) for 3 years of data with monthly frequency output (3 years * 12 months)
-        
-    :param date_start: Starting time of data chunk
+    Calculate estimated number of timesteps (ENOT) for a given date range and sampling frequency.
+
+    Supported chunk frequencies:
+    - `'yearly'`: 1 sample per year.
+    - `'monthly'`: 12 samples per year.
+    - `'daily'`: 1 sample per day.
+    - `'4xdaily'`: 4 samples per day (every 6 hours).
+    - `'8xdaily'`: 8 samples per day (every 3 hours).
+    - `'hourly'`: 24 samples per day.
+    - `'30minute'`: 48 samples per day.
+
+    :param date_start: is a string capturing the start date (year, month, day, hour, minute).
     :type date_start: str
-    :param date_end: Ending time of data chunk
+    :param date_end: is a string capturing the end date (year, month, day, hour, minute).
     :type date_end: str
-    :param chunk_type: Frequency of data chunk
+    :param chunk_type: is a frequency identifier string (`'yearly'`, `'monthly'`, `'daily'`, etc.).
     :type chunk_type: str
-    :param cal: Calendar type corresponding to data (must be a cftime supported calendar: ‘standard’, ‘gregorian’,
-                ‘proleptic_gregorian’, ‘noleap’, ‘365_day’, ‘360_day’, ‘julian’, ‘all_leap’, ‘366_day’)
+    :param cal: is a calendar name supported by `cftime` (e.g., `'gregorian'`, `'noleap'`, `'360_day'`).
     :type cal: str
-    :return: Estimated number of timesteps
+
+    :raises ValueError: If `chunk_type` is unrecognized.
+    :return: Estimated total number of time records expected in the file.
     :rtype: int
     """
-
-    #Chunk type is the frequency of the data chunk
-    #enot = estimated number of timesteps
-    #start/end are cf datetime objects representing the start and end time of the data chunk
-    #diff represents the time difference between start and stop
     if chunk_type == 'yearly':
         enot = int(date_end[1]) - int(date_start[1]) + 1
 
@@ -120,20 +127,28 @@ def getenot(date_start: str,
     else:
         raise ValueError(f"Unknown chunk_type '{chunk_type}'")
 
-    fre_logger.debug(f"date start: {date_start}; date end: {date_end}; chunk_type: {chunk_type}; calendar: {cal}; timesteps: {enot}")
- 
+    fre_logger.debug(
+        f"date start: {date_start}; date end: {date_end}; "
+        f"chunk_type: {chunk_type}; calendar: {cal}; timesteps: {enot}"
+    )
+
     return enot
 
 
 def validate(filepath: str):
     """
-    Compares the number of timesteps in a postprocessed time-series netCDF (.nc) file to the number of expected timesteps as calculated using elapsed time and data frequency.
-    Runs nccheck on every timeseries file in pp dir.
- 
-    :param filepath: Path to time-series file to be checked
+    Validate time step counts in a post-processed time-series NetCDF file against expectation.
+
+    Extracts start and end date ranges from the filename pattern `.YYYY[MMDDHH:mm]-YYYY[MMDDHH:mm].`,
+    reads calendar metadata from NetCDF time coordinates, calculates expected timesteps,
+    and runs `nccheck_script.check`.
+
+    :param filepath: is the path to a post-processed NetCDF time-series file.
     :type filepath: str
-    :raises ValueError: Calendar name doesn't follow cftime conventions, frequency can't be determined from filepath, or number of timesteps differ from expectation
-    :return: Returns 0 unless an exception is raised or number of timesteps differ from expectation
+
+    :raises ValueError: If calendar name is invalid, file date format is unparseable,
+                        sub-daily frequency cannot be inferred, or time steps differ from calculated ENOT.
+    :return: Returns 0 upon successful validation.
     :rtype: int
     """
 
@@ -141,8 +156,12 @@ def validate(filepath: str):
     import re
     # Get the date range from the filename
     # This regular expression accepts at minimum '.YYYY-YYYY.' date strings.
-    # If month, day, hour, and minute strings are present it will identify them by looking for groups of two digits after the year string
-    match = re.compile(r"\.((?:\d{4})(?:\d{2}(?:\d{2}(?:\d{2}(?::\d{2})?)?)?)?)-((?:\d{4})(?:\d{2}(?:\d{2}(?:\d{2}(?::\d{2})?)?)?)?)\.")
+    # If month, day, hour, and minute strings are present it will identify them
+    # by looking for groups of two digits after the year string
+    match = re.compile(
+        r"\.((?:\d{4})(?:\d{2}(?:\d{2}(?:\d{2}(?::\d{2})?)?)?)?)-((?:\d{4})"
+        r"(?:\d{2}(?:\d{2}(?:\d{2}(?::\d{2})?)?)?)?)\."
+    )
     filename = os.path.basename(filepath)
     date_range = match.search(filename)
 
@@ -150,51 +169,40 @@ def validate(filepath: str):
     # date_range[0] is the full match (e.g., ".202201-202501."
     # date_range[1] is the start date (e.g., "202201")
     # date_range[2] is the end date (e.g., "202501")
-    # This regular expression captures date start/end individually by first capturing the year as a 4 digit number then capturing each following group of two digits
+    # This regular expression captures date start/end individually by first
+    # capturing the year as a 4 digit number then capturing each following
+    # group of two digits
     # Minute string is identified by ':' followed with two digits
     d_regex = re.compile(r"(\d{4})(\d{2})?(\d{2})?(\d{2})?(?::(\d{2}))?")
     date_end = d_regex.search(date_range[2])
     date_start = d_regex.search(date_range[1])
     date_length = len(date_start.group())
+
     fre_logger.debug(f"date_start: {date_start}; date_end: {date_end}; date_length: {date_length}")
 
     # Get calendar type from metadata and make sure it's valid
-    # dataset is a netCDF4 Dataset object created from the given file
+
+    # Inspect NetCDF metadata for CF calendar
     dataset = netCDF4.Dataset(filepath, 'r')
-    # Cal is the calendar type read from the file's metadata
     cal = dataset.variables['time'].calendar.lower()
 
-    # Check if the calendar name is valid by creating a test datetime object.. if it's not raise an error
     try:
         cftime.datetime(1,1,1, calendar = cal)
     except:
-        raise ValueError(f" Calendar name must follow cf convention for validation. {cal} is not a valid calendar.")
+        raise ValueError(f" Calendar name must follow CF convention for validation. '{cal}' is not a valid calendar.")
 
-    # date_{end,start} will have a total of date_end.lastindex groups,
-    # that are the year (date_end[1]), the month (date_end[2]), the
-    # day (date_end[3]), and the hour (date_end[4]).
-    # You can use the value of date_end.lastindex to know if this is
-    # a yearly, monthly, daily, or sub-daily file.
-
-    # Estimated number of timesteps
     enot = None
 
-    # YEARLY
     if date_length == 4:
         enot = getenot(date_start, date_end, 'yearly', cal)
-
-    # MONTHLY
     elif date_length == 6:
         enot = getenot(date_start, date_end, 'monthly', cal)
-
-    # DAILY
     elif date_length == 8:
         enot = getenot(date_start, date_end, 'daily', cal)
-
-    # Sub-daily to hourly
     elif date_length == 10:
         # We would rather not check filepaths but it's necessary for sub-daily files
-        # Path elements contains the directories from the filepath.. we use this to determine frequency/chunk_size in sub-daily files
+        # Path elements contains the directories from the filepath..
+        # we use this to determine frequency/chunk_size in sub-daily files
         path_elements = os.path.abspath(filepath).split('/')
         expected_frequencies  = ['6hr', 'PT6H', '3hr', 'PT3H', '1hr', 'PT1H', '30min', 'PT30M', 'PT0.5H']
 
@@ -216,7 +224,12 @@ def validate(filepath: str):
 
         # If none of the expected frequencies are found in filepath, raise ValueError
         if all(freq not in path_elements for freq in expected_frequencies):
-            raise ValueError(f" Cannot determine frequency from {filepath}. Sub-daily files must at minimum be placed in a directory corresponding to data frequency: '6hr, 'PT6H', '3hr, 'PT3H', '1hr, 'PT1H', '30min, 'PT30M, 'PT0.5H'")
+            raise ValueError(
+                f" Cannot determine frequency from {filepath}. Sub-daily"
+                " files must at minimum be placed in a directory"
+                " corresponding to data frequency: '6hr, 'PT6H', '3hr,"
+                " 'PT3H', '1hr, 'PT1H', '30min, 'PT30M, 'PT0.5H'"
+            )
 
     elif date_length == 12:
         enot = getenot(date_start, date_end, '30minute', cal)
