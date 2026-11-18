@@ -4,6 +4,7 @@ import logging
 #import ast
 import click
 from fre.yamltools import combine_yamls_script
+from fre.yamltools import validate_script
 fre_logger = logging.getLogger(__name__)
 
 @click.group(help=click.style(" - yamltools subcommands", fg=(202,177,95)))
@@ -46,17 +47,17 @@ def combine(yamls, experiment, platform, target, output, no_clean):
 
     combine_yamls_script.yamltools_combine_subtool(yaml_paths, experiment, platform, target, output, no_clean)
 
-#@yamltools_cli.command()
-#@click.option("-y", "--yaml",
-#              type=str,
-#              help="Combined, resolved YAML file to be used for parsing",
-#              required=True)
-#@click.option("-js", "--json-schema",
-#              type=str,
-#              help="JSON schema file used to validate the YAML",
-#              required=True)
-#def validate(yaml, schema):
-#    """
-#    - Validate the combined, resolved YAML file against a JSON schema
-#    """
-#    validate_script.validate_subtool(yaml, schema)
+@yamltools_cli.command()
+@click.option("-y", "--yaml",
+              type=str,
+              help="Combined, resolved YAML file to be used for parsing",
+              required=True)
+@click.option("-js", "--json-schema",
+              type=str,
+              help="JSON schema file used to validate the YAML",
+              required=True)
+def validate(yaml, json_schema):
+    """
+    - Validate the combined, resolved YAML file against a JSON schema
+    """
+    validate_script.validate_subtool(yaml, json_schema)
