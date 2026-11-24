@@ -38,7 +38,7 @@ def combine(yamls, experiment, platform, target, output, no_clean):
     # if not piped from fre list yamls
     yaml_paths = []
     if yamls:
-        fre_logger.info("NOT PIPED")
+        fre_logger.info("NOT PIPED IN COMBINE")
         yaml_paths = yamls
     else:
         fre_logger.info("PIPED")
@@ -54,10 +54,13 @@ def combine(yamls, experiment, platform, target, output, no_clean):
               required=True)
 @click.option("-js", "--json-schema",
               type=str,
-              help="JSON schema file used to validate the YAML",
-              required=True)
-def validate(yaml, json_schema):
+              help="JSON schema file used to validate the YAML")
+#              required=True)
+@click.option("-a", "--application",
+              type=str,
+              help="Application name - only need to pass if you don't pass schema")
+def validate(yaml, json_schema, application):
     """
     - Validate the combined, resolved YAML file against a JSON schema
     """
-    validate_script.validate_subtool(yaml, json_schema)
+    validate_script.validate_subtool(yaml, json_schema, application)
